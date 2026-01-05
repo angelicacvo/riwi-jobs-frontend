@@ -3,28 +3,28 @@ import { Application, ApplicationStats, PopularVacancy } from '@/types';
 
 export const applicationService = {
   async getAll(): Promise<Application[]> {
-    const response = await api.get<Application[]>('/applications');
-    return response.data;
+    const response = await api.get<{ data: Application[] }>('/applications');
+    return response.data.data;
   },
 
   async getById(id: string): Promise<Application> {
-    const response = await api.get<Application>(`/applications/${id}`);
-    return response.data;
+    const response = await api.get<{ data: Application }>(`/applications/${id}`);
+    return response.data.data;
   },
 
   async create(vacancyId: string): Promise<Application> {
-    const response = await api.post<Application>('/applications', { vacancyId });
-    return response.data;
+    const response = await api.post<{ data: Application }>('/applications', { vacancyId });
+    return response.data.data;
   },
 
   async update(id: string, status: string): Promise<Application> {
-    const response = await api.patch<Application>(`/applications/${id}`, { status });
-    return response.data;
+    const response = await api.patch<{ data: Application }>(`/applications/${id}`, { status });
+    return response.data.data;
   },
 
   async delete(id: string): Promise<{ message: string }> {
-    const response = await api.delete<{ message: string }>(`/applications/${id}`);
-    return response.data;
+    const response = await api.delete<{ data: { message: string } }>(`/applications/${id}`);
+    return response.data.data;
   },
 
   async getVacancyStats(vacancyId: string): Promise<{
@@ -34,8 +34,8 @@ export const applicationService = {
     availableSlots: number;
     isFullyBooked: boolean;
   }> {
-    const response = await api.get(`/applications/vacancy/${vacancyId}/stats`);
-    return response.data;
+    const response = await api.get<{ data: any }>(`/applications/vacancy/${vacancyId}/stats`);
+    return response.data.data;
   },
 
   async getUserStats(userId: string): Promise<{
@@ -44,17 +44,17 @@ export const applicationService = {
     activeApplications: number;
     recentApplications: Application[];
   }> {
-    const response = await api.get(`/applications/stats/user/${userId}`);
-    return response.data;
+    const response = await api.get<{ data: any }>(`/applications/stats/user/${userId}`);
+    return response.data.data;
   },
 
   async getPopularVacancies(): Promise<PopularVacancy[]> {
-    const response = await api.get<PopularVacancy[]>('/applications/stats/popular/vacancies');
-    return response.data;
+    const response = await api.get<{ data: PopularVacancy[] }>('/applications/stats/popular/vacancies');
+    return response.data.data;
   },
 
   async getDashboard(): Promise<ApplicationStats> {
-    const response = await api.get<ApplicationStats>('/applications/stats/dashboard');
-    return response.data;
+    const response = await api.get<{ data: ApplicationStats }>('/applications/stats/dashboard');
+    return response.data.data;
   },
 };

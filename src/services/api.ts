@@ -1,8 +1,9 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const API_BASE_URL = 'http://localhost:3000';
-const API_KEY = 'riwi-2024-secret-key-pro';
+// Use environment variables for configuration
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_KEY = import.meta.env.VITE_API_KEY || 'angelica-secure-api-key-2026';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
