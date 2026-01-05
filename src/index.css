@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Riwi Jobs Design System - Inspired by Riwi.io */
+
+@layer base {
+  :root {
+    /* Riwi Brand Colors - Dark Blue/Purple with Coral accent */
+    --background: 0 0% 100%;
+    --foreground: 232 47% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 232 47% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 232 47% 15%;
+
+    /* Primary: Deep Navy/Purple from Riwi */
+    --primary: 235 45% 20%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Lighter blue */
+    --secondary: 230 40% 96%;
+    --secondary-foreground: 235 45% 20%;
+
+    --muted: 230 30% 96%;
+    --muted-foreground: 230 15% 45%;
+
+    /* Accent: Coral/Orange from Riwi */
+    --accent: 12 80% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Success: Green */
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning: Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 230 25% 90%;
+    --input: 230 25% 90%;
+    --ring: 235 45% 20%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar */
+    --sidebar-background: 235 45% 15%;
+    --sidebar-foreground: 230 30% 90%;
+    --sidebar-primary: 12 80% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 235 40% 25%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 235 35% 25%;
+    --sidebar-ring: 12 80% 60%;
+
+    /* Custom gradients and effects */
+    --gradient-primary: linear-gradient(135deg, hsl(235 45% 20%) 0%, hsl(250 50% 35%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(12 80% 60%) 0%, hsl(25 90% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(235 45% 12%) 0%, hsl(250 50% 25%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px hsl(235 45% 20% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(235 45% 20% / 0.1), 0 2px 4px -2px hsl(235 45% 20% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(235 45% 20% / 0.1), 0 4px 6px -4px hsl(235 45% 20% / 0.1);
+    --shadow-glow: 0 0 20px hsl(12 80% 60% / 0.3);
+  }
+
+  .dark {
+    --background: 235 45% 8%;
+    --foreground: 230 30% 95%;
+
+    --card: 235 40% 12%;
+    --card-foreground: 230 30% 95%;
+
+    --popover: 235 40% 12%;
+    --popover-foreground: 230 30% 95%;
+
+    --primary: 12 80% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 235 35% 20%;
+    --secondary-foreground: 230 30% 95%;
+
+    --muted: 235 30% 18%;
+    --muted-foreground: 230 15% 60%;
+
+    --accent: 12 80% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 235 30% 22%;
+    --input: 235 30% 22%;
+    --ring: 12 80% 60%;
+
+    --sidebar-background: 235 45% 10%;
+    --sidebar-foreground: 230 30% 90%;
+    --sidebar-primary: 12 80% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 235 40% 18%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 235 30% 20%;
+    --sidebar-ring: 12 80% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
