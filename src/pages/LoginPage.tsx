@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,8 +33,15 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -67,7 +74,7 @@ const LoginPage = () => {
         icon: 'error',
         title: 'Error',
         text: Array.isArray(message) ? message[0] : message,
-        confirmButtonColor: 'hsl(235, 45%, 20%)',
+        confirmButtonColor: 'hsl(240, 50%, 12%)',
       });
     } finally {
       setIsLoading(false);
@@ -83,7 +90,7 @@ const LoginPage = () => {
         icon: 'success',
         title: '¡Registro exitoso!',
         text: 'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
-        confirmButtonColor: 'hsl(235, 45%, 20%)',
+        confirmButtonColor: 'hsl(240, 50%, 12%)',
       });
       
       setIsLogin(true);
@@ -94,7 +101,7 @@ const LoginPage = () => {
         icon: 'error',
         title: 'Error',
         text: Array.isArray(message) ? message[0] : message,
-        confirmButtonColor: 'hsl(235, 45%, 20%)',
+        confirmButtonColor: 'hsl(240, 50%, 12%)',
       });
     } finally {
       setIsLoading(false);

@@ -6,113 +6,113 @@
 
 @layer base {
   :root {
-    /* Riwi Brand Colors - Dark Blue/Purple with Coral accent */
+    /* Riwi Brand Colors - Dark Blue/Purple with Coral/Orange accent */
     --background: 0 0% 100%;
-    --foreground: 232 47% 15%;
+    --foreground: 240 50% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 232 47% 15%;
+    --card-foreground: 240 50% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 232 47% 15%;
+    --popover-foreground: 240 50% 12%;
 
-    /* Primary: Deep Navy/Purple from Riwi */
-    --primary: 235 45% 20%;
+    /* Primary: Deep Navy/Purple from Riwi (#1a1f3a - dark blue) */
+    --primary: 240 50% 12%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Lighter blue */
-    --secondary: 230 40% 96%;
-    --secondary-foreground: 235 45% 20%;
+    /* Secondary: Lighter blue/purple */
+    --secondary: 240 30% 96%;
+    --secondary-foreground: 240 50% 12%;
 
-    --muted: 230 30% 96%;
-    --muted-foreground: 230 15% 45%;
+    --muted: 240 20% 96%;
+    --muted-foreground: 240 10% 45%;
 
-    /* Accent: Coral/Orange from Riwi */
-    --accent: 12 80% 60%;
+    /* Accent: Coral/Orange from Riwi (#ff6b35 - coral orange) */
+    --accent: 14 100% 60%;
     --accent-foreground: 0 0% 100%;
 
-    /* Success: Green */
-    --success: 160 84% 39%;
+    /* Success: Teal/Green */
+    --success: 165 70% 45%;
     --success-foreground: 0 0% 100%;
 
     /* Warning: Amber */
-    --warning: 38 92% 50%;
+    --warning: 38 92% 55%;
     --warning-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 230 25% 90%;
-    --input: 230 25% 90%;
-    --ring: 235 45% 20%;
+    --border: 240 20% 90%;
+    --input: 240 20% 90%;
+    --ring: 240 50% 12%;
 
     --radius: 0.75rem;
 
-    /* Sidebar */
-    --sidebar-background: 235 45% 15%;
-    --sidebar-foreground: 230 30% 90%;
-    --sidebar-primary: 12 80% 60%;
+    /* Sidebar - Dark navy/purple background */
+    --sidebar-background: 240 50% 10%;
+    --sidebar-foreground: 240 20% 90%;
+    --sidebar-primary: 14 100% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 235 40% 25%;
+    --sidebar-accent: 240 45% 18%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 235 35% 25%;
-    --sidebar-ring: 12 80% 60%;
+    --sidebar-border: 240 40% 18%;
+    --sidebar-ring: 14 100% 60%;
 
-    /* Custom gradients and effects */
-    --gradient-primary: linear-gradient(135deg, hsl(235 45% 20%) 0%, hsl(250 50% 35%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(12 80% 60%) 0%, hsl(25 90% 55%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(235 45% 12%) 0%, hsl(250 50% 25%) 100%);
+    /* Custom gradients - Riwi inspired */
+    --gradient-primary: linear-gradient(135deg, hsl(240 50% 12%) 0%, hsl(250 55% 25%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(14 100% 60%) 0%, hsl(20 100% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(240 50% 10%) 0%, hsl(250 55% 20%) 100%);
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px hsl(235 45% 20% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(235 45% 20% / 0.1), 0 2px 4px -2px hsl(235 45% 20% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(235 45% 20% / 0.1), 0 4px 6px -4px hsl(235 45% 20% / 0.1);
-    --shadow-glow: 0 0 20px hsl(12 80% 60% / 0.3);
+    /* Shadows with orange accent glow */
+    --shadow-sm: 0 1px 2px hsl(240 50% 12% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(240 50% 12% / 0.1), 0 2px 4px -2px hsl(240 50% 12% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(240 50% 12% / 0.1), 0 4px 6px -4px hsl(240 50% 12% / 0.1);
+    --shadow-glow: 0 0 25px hsl(14 100% 60% / 0.4);
   }
 
   .dark {
-    --background: 235 45% 8%;
-    --foreground: 230 30% 95%;
+    --background: 240 50% 6%;
+    --foreground: 240 20% 95%;
 
-    --card: 235 40% 12%;
-    --card-foreground: 230 30% 95%;
+    --card: 240 45% 10%;
+    --card-foreground: 240 20% 95%;
 
-    --popover: 235 40% 12%;
-    --popover-foreground: 230 30% 95%;
+    --popover: 240 45% 10%;
+    --popover-foreground: 240 20% 95%;
 
-    --primary: 12 80% 60%;
+    --primary: 14 100% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 235 35% 20%;
-    --secondary-foreground: 230 30% 95%;
+    --secondary: 240 40% 18%;
+    --secondary-foreground: 240 20% 95%;
 
-    --muted: 235 30% 18%;
-    --muted-foreground: 230 15% 60%;
+    --muted: 240 35% 15%;
+    --muted-foreground: 240 15% 60%;
 
-    --accent: 12 80% 60%;
+    --accent: 14 100% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%;
+    --success: 165 70% 45%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
+    --warning: 38 92% 55%;
     --warning-foreground: 0 0% 100%;
 
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 235 30% 22%;
-    --input: 235 30% 22%;
-    --ring: 12 80% 60%;
+    --border: 240 35% 18%;
+    --input: 240 35% 18%;
+    --ring: 14 100% 60%;
 
-    --sidebar-background: 235 45% 10%;
-    --sidebar-foreground: 230 30% 90%;
-    --sidebar-primary: 12 80% 60%;
+    --sidebar-background: 240 50% 8%;
+    --sidebar-foreground: 240 20% 90%;
+    --sidebar-primary: 14 100% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 235 40% 18%;
+    --sidebar-accent: 240 45% 15%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 235 30% 20%;
-    --sidebar-ring: 12 80% 60%;
+    --sidebar-border: 240 35% 15%;
+    --sidebar-ring: 14 100% 60%;
   }
 }
 
@@ -156,6 +156,10 @@
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -169,6 +173,17 @@
     to { 
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 }

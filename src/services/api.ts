@@ -39,7 +39,7 @@ api.interceptors.response.use(
         icon: 'error',
         title: 'Sesión expirada',
         text: 'Por favor inicia sesión nuevamente',
-        confirmButtonColor: 'hsl(235, 45%, 20%)',
+        confirmButtonColor: 'hsl(240, 50%, 12%)',
       }).then(() => {
         window.location.href = '/login';
       });
@@ -48,7 +48,7 @@ api.interceptors.response.use(
         icon: 'error',
         title: 'Acceso denegado',
         text: 'No tienes permisos para realizar esta acción',
-        confirmButtonColor: 'hsl(235, 45%, 20%)',
+        confirmButtonColor: 'hsl(240, 50%, 12%)',
       });
     }
 

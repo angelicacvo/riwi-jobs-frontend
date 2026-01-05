@@ -49,8 +49,8 @@ const Sidebar = () => {
       text: '¿Estás seguro de que deseas salir?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: 'hsl(235, 45%, 20%)',
-      cancelButtonColor: 'hsl(230, 15%, 45%)',
+      confirmButtonColor: 'hsl(240, 50%, 12%)',
+      cancelButtonColor: 'hsl(240, 10%, 45%)',
       confirmButtonText: 'Sí, salir',
       cancelButtonText: 'Cancelar',
     }).then((result) => {

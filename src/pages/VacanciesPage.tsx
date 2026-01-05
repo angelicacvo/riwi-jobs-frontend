@@ -69,8 +69,8 @@ const VacanciesPage = () => {
         : 'Los coders podrán postularse a esta vacante',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: 'hsl(235, 45%, 20%)',
-      cancelButtonColor: 'hsl(230, 15%, 45%)',
+      confirmButtonColor: 'hsl(240, 50%, 12%)',
+      cancelButtonColor: 'hsl(240, 10%, 45%)',
       confirmButtonText: vacancy.isActive ? 'Sí, desactivar' : 'Sí, activar',
       cancelButtonText: 'Cancelar',
     });
@@ -105,7 +105,7 @@ const VacanciesPage = () => {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: 'hsl(0, 84%, 60%)',
-      cancelButtonColor: 'hsl(230, 15%, 45%)',
+      cancelButtonColor: 'hsl(240, 10%, 45%)',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
     });

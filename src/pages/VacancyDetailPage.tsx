@@ -81,8 +81,8 @@ const VacancyDetailPage = () => {
       text: `¿Deseas postularte a "${vacancy.title}" en ${vacancy.company}?`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: 'hsl(12, 80%, 60%)',
-      cancelButtonColor: 'hsl(230, 15%, 45%)',
+      confirmButtonColor: 'hsl(14, 100%, 60%)',
+      cancelButtonColor: 'hsl(240, 10%, 45%)',
       confirmButtonText: 'Sí, postularme',
       cancelButtonText: 'Cancelar',
     });
@@ -115,7 +115,7 @@ const VacancyDetailPage = () => {
       title: vacancy.isActive ? '¿Desactivar vacante?' : '¿Activar vacante?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: 'hsl(235, 45%, 20%)',
+      confirmButtonColor: 'hsl(240, 50%, 12%)',
       confirmButtonText: vacancy.isActive ? 'Sí, desactivar' : 'Sí, activar',
       cancelButtonText: 'Cancelar',
     });

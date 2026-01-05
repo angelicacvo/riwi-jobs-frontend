@@ -58,7 +58,7 @@ const ApplicationsPage = () => {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: 'hsl(0, 84%, 60%)',
-      cancelButtonColor: 'hsl(230, 15%, 45%)',
+      cancelButtonColor: 'hsl(240, 10%, 45%)',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
     });
