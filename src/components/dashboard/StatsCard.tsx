@@ -59,7 +59,7 @@ const StatsCard = ({
                 trend.isPositive ? 'text-success' : 'text-destructive'
               )}
             >
-              {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
+              {trend.isPositive ? '+' : '-'} {Math.abs(trend.value)}%
             </p>
           )}
         </div>

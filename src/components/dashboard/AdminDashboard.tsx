@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Briefcase, FileText, TrendingUp, Plus, Settings, BarChart } from 'lucide-react';
+import { Users, Briefcase, FileText, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import StatsCard from './StatsCard';
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
   ] : [];
 
   const barData = popularVacancies.map(v => ({
-    name: v.title.length > 15 ? v.title.substring(0, 15) + '...' : v.title,
+    name: v.title.length > 20 ? v.title.substring(0, 20) + '...' : v.title,
     postulaciones: v.applicationsCount,
   }));
 
@@ -72,9 +72,6 @@ const AdminDashboard = () => {
         </Button>
         <Button asChild variant="outline">
           <Link to="/applications"><FileText className="w-4 h-4 mr-2" />Ver Postulaciones</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link to="/metrics"><BarChart className="w-4 h-4 mr-2" />Métricas</Link>
         </Button>
       </div>
 
@@ -111,7 +108,7 @@ const AdminDashboard = () => {
         {/* User Distribution */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Distribución de Usuarios</CardTitle>
+            <CardTitle className="text-lg">Distribucion de Usuarios</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
@@ -149,15 +146,23 @@ const AdminDashboard = () => {
         {/* Popular Vacancies */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Vacantes más Populares</CardTitle>
+            <CardTitle className="text-lg">Vacantes mas Populares</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <RechartsBarChart data={barData} layout="vertical">
+                <RechartsBarChart data={barData} layout="vertical" margin={{ left: 20 }}>
                   <XAxis type="number" />
-                  <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 12 }} />
-                  <Tooltip />
+                  <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 11 }} />
+                  <Tooltip 
+                    formatter={(value: number) => [`${value} postulaciones`, '']}
+                    labelFormatter={(label: string) => {
+                      const vacancy = popularVacancies.find(v => 
+                        (v.title.length > 20 ? v.title.substring(0, 20) + '...' : v.title) === label
+                      );
+                      return vacancy ? vacancy.title : label;
+                    }}
+                  />
                   <Bar dataKey="postulaciones" fill="hsl(12, 80%, 60%)" radius={[0, 4, 4, 0]} />
                 </RechartsBarChart>
               </ResponsiveContainer>
@@ -179,7 +184,7 @@ const AdminDashboard = () => {
                   <div>
                     <p className="font-medium">{app.user?.name || 'Usuario'}</p>
                     <p className="text-sm text-muted-foreground">
-                      Se postuló a {app.vacancy?.title || 'Vacante'}
+                      Se postulo a {app.vacancy?.title || 'Vacante'}
                     </p>
                   </div>
                   <span className="text-xs text-muted-foreground">

@@ -1,13 +1,12 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Briefcase, 
-  FileText, 
-  BarChart3, 
-  User, 
+import {
+  LayoutDashboard,
+  Users,
+  Briefcase,
+  FileText,
+  User,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -31,7 +30,6 @@ const navItems: NavItem[] = [
   { label: 'Vacantes', href: '/vacancies', icon: Briefcase, roles: [UserRole.ADMIN, UserRole.GESTOR] },
   { label: 'Explorar Vacantes', href: '/explore', icon: Briefcase, roles: [UserRole.CODER] },
   { label: 'Postulaciones', href: '/applications', icon: FileText, roles: [UserRole.ADMIN, UserRole.GESTOR, UserRole.CODER] },
-  { label: 'Métricas', href: '/metrics', icon: BarChart3, roles: [UserRole.ADMIN, UserRole.GESTOR] },
   { label: 'Mi Perfil', href: '/profile', icon: User, roles: [UserRole.ADMIN, UserRole.GESTOR, UserRole.CODER] },
 ];
 
@@ -45,13 +43,13 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     Swal.fire({
-      title: '¿Cerrar sesión?',
-      text: '¿Estás seguro de que deseas salir?',
+      title: 'Cerrar sesion?',
+      text: 'Estas seguro de que deseas salir?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: 'hsl(240, 50%, 12%)',
       cancelButtonColor: 'hsl(240, 10%, 45%)',
-      confirmButtonText: 'Sí, salir',
+      confirmButtonText: 'Si, salir',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -75,7 +73,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside 
+    <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen transition-all duration-300 flex flex-col",
         "bg-sidebar text-sidebar-foreground border-r border-sidebar-border",
@@ -118,7 +116,7 @@ const Sidebar = () => {
         {filteredItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.href;
-          
+
           return (
             <Link
               key={item.href}
@@ -126,8 +124,8 @@ const Sidebar = () => {
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
                 "hover:bg-sidebar-accent",
-                isActive 
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-glow" 
+                isActive
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-glow"
                   : "text-sidebar-foreground/80"
               )}
             >
@@ -149,7 +147,7 @@ const Sidebar = () => {
           )}
         >
           <LogOut className="w-5 h-5" />
-          {!collapsed && <span>Cerrar Sesión</span>}
+          {!collapsed && <span>Cerrar Sesion</span>}
         </Button>
       </div>
     </aside>

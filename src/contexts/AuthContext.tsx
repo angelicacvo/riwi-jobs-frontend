@@ -23,7 +23,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const storedToken = authService.getStoredToken();
     const storedUser = authService.getStoredUser();
-    
+
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(storedUser);
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       value={{
         user,
         token,
-        isAuthenticated: !!token && !!user,
+        isAuthenticated: !!token,
         isLoading,
         login,
         logout,
@@ -71,9 +71,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;

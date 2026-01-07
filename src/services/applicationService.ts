@@ -17,8 +17,8 @@ export const applicationService = {
     return response.data.data;
   },
 
-  async update(id: string, status: string): Promise<Application> {
-    const response = await api.patch<{ data: Application }>(`/applications/${id}`, { status });
+  async update(id: string, data: Partial<Application>): Promise<Application> {
+    const response = await api.patch<{ data: Application }>(`/applications/${id}`, data);
     return response.data.data;
   },
 

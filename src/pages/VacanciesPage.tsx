@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { vacancyService } from '@/services/vacancyService';
 import { useAuth } from '@/contexts/AuthContext';
 import { Vacancy, ModalityEnum, UserRole } from '@/types';
@@ -30,23 +30,23 @@ const VacanciesPage = () => {
 
   useEffect(() => {
     let result = vacancies;
-    
+
     if (searchTerm) {
-      result = result.filter(v => 
+      result = result.filter(v =>
         v.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         v.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
         v.technologies.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    
+
     if (modalityFilter !== 'all') {
       result = result.filter(v => v.modality === modalityFilter);
     }
-    
+
     if (statusFilter !== 'all') {
-      result = result.filter(v => v.isActive === (statusFilter === 'active'));
+      result = result.filter(v => statusFilter === 'active' ? v.isActive : !v.isActive);
     }
-    
+
     setFilteredVacancies(result);
   }, [vacancies, searchTerm, modalityFilter, statusFilter]);
 
@@ -62,105 +62,96 @@ const VacanciesPage = () => {
   };
 
   const handleToggleActive = async (vacancy: Vacancy) => {
-    const result = await Swal.fire({
-      title: vacancy.isActive ? '¿Desactivar vacante?' : '¿Activar vacante?',
-      text: vacancy.isActive 
-        ? 'Los coders no podrán postularse mientras esté inactiva'
-        : 'Los coders podrán postularse a esta vacante',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: 'hsl(240, 50%, 12%)',
-      cancelButtonColor: 'hsl(240, 10%, 45%)',
-      confirmButtonText: vacancy.isActive ? 'Sí, desactivar' : 'Sí, activar',
-      cancelButtonText: 'Cancelar',
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await vacancyService.toggleActive(vacancy.id);
-        Swal.fire({ 
-          icon: 'success', 
-          title: '¡Listo!', 
-          text: `Vacante ${vacancy.isActive ? 'desactivada' : 'activada'} correctamente`,
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        fetchVacancies();
-      } catch (error: any) {
-        const message = error.response?.data?.message || 'Error al cambiar el estado';
-        Swal.fire({ icon: 'error', title: 'Error', text: Array.isArray(message) ? message[0] : message });
-      }
+    try {
+      await vacancyService.toggleActive(vacancy.id);
+      Swal.fire({
+        icon: 'success',
+        title: vacancy.isActive ? 'Vacante desactivada' : 'Vacante activada',
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      fetchVacancies();
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data?.message || 'No se pudo cambiar el estado',
+      });
     }
   };
 
   const handleDelete = async (vacancy: Vacancy) => {
-    if (!hasRole([UserRole.ADMIN])) {
-      Swal.fire({ icon: 'error', title: 'Error', text: 'Solo los administradores pueden eliminar vacantes' });
-      return;
-    }
-
     const result = await Swal.fire({
-      title: '¿Eliminar vacante?',
-      text: `¿Estás seguro de eliminar "${vacancy.title}"?`,
+      title: 'Eliminar vacante?',
+      text: `Estas seguro de eliminar "${vacancy.title}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: 'hsl(0, 84%, 60%)',
       cancelButtonColor: 'hsl(240, 10%, 45%)',
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar',
     });
 
     if (result.isConfirmed) {
       try {
         await vacancyService.delete(vacancy.id);
-        Swal.fire({ icon: 'success', title: '¡Eliminado!', text: 'Vacante eliminada correctamente', timer: 2000, showConfirmButton: false });
+        Swal.fire({
+          icon: 'success',
+          title: 'Vacante eliminada',
+          timer: 1500,
+          showConfirmButton: false,
+        });
         fetchVacancies();
       } catch (error: any) {
-        const message = error.response?.data?.message || 'Error al eliminar la vacante';
-        Swal.fire({ icon: 'error', title: 'Error', text: Array.isArray(message) ? message[0] : message });
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.response?.data?.message || 'No se pudo eliminar',
+        });
       }
     }
   };
 
-  const getModalityLabel = (modality: ModalityEnum) => {
-    const labels = { REMOTE: 'Remoto', ONSITE: 'Presencial', HYBRID: 'Híbrido' };
-    return labels[modality];
-  };
-
-  const getModalityBadge = (modality: ModalityEnum) => {
-    const styles = {
+  const getModalityBadge = (modality: string) => {
+    const modalityUpper = String(modality).toUpperCase();
+    const styles: Record<string, string> = {
       REMOTE: 'bg-success/10 text-success border-success/30',
       ONSITE: 'bg-warning/10 text-warning border-warning/30',
       HYBRID: 'bg-accent/10 text-accent border-accent/30',
     };
-    return styles[modality];
+    const labels: Record<string, string> = {
+      REMOTE: 'Remoto',
+      ONSITE: 'Presencial',
+      HYBRID: 'Hibrido',
+    };
+    return { style: styles[modalityUpper] || '', label: labels[modalityUpper] || modality };
   };
 
-  if (isLoading) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-        </div>
-      </Layout>
-    );
-  }
+  const isAdmin = hasRole([UserRole.ADMIN]);
+  const canManageVacancies = hasRole([UserRole.ADMIN, UserRole.GESTOR]);
 
   return (
     <Layout>
-      <div className="animate-fade-in space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Gestión de Vacantes</h1>
-            <p className="text-muted-foreground">{vacancies.length} vacantes registradas</p>
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
+              <Briefcase className="w-8 h-8" />
+              Gestion de Vacantes
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Administra las ofertas laborales
+            </p>
           </div>
-          
-          <Button asChild className="gradient-accent hover:opacity-90">
-            <Link to="/vacancies/new">
-              <Plus className="w-4 h-4 mr-2" />
-              Crear Vacante
-            </Link>
-          </Button>
+          {canManageVacancies && (
+            <Button asChild className="gradient-accent hover:opacity-90">
+              <Link to="/vacancies/new">
+                <Plus className="w-4 h-4 mr-2" />
+                Nueva Vacante
+              </Link>
+            </Button>
+          )}
         </div>
 
         {/* Filters */}
@@ -168,9 +159,9 @@ const VacanciesPage = () => {
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  placeholder="Buscar por título, empresa o tecnologías..."
+                  placeholder="Buscar por titulo, empresa o tecnologias..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -182,9 +173,9 @@ const VacanciesPage = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas</SelectItem>
-                  <SelectItem value={ModalityEnum.REMOTE}>Remoto</SelectItem>
-                  <SelectItem value={ModalityEnum.ONSITE}>Presencial</SelectItem>
-                  <SelectItem value={ModalityEnum.HYBRID}>Híbrido</SelectItem>
+                    <SelectItem value="remote">Remoto</SelectItem>
+                    <SelectItem value="onsite">Presencial</SelectItem>
+                    <SelectItem value="hybrid">Hibrido</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -201,49 +192,49 @@ const VacanciesPage = () => {
           </CardContent>
         </Card>
 
-        {/* Vacancies Table */}
+        {/* Table */}
         <Card>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Título</TableHead>
-                    <TableHead>Empresa</TableHead>
-                    <TableHead>Modalidad</TableHead>
-                    <TableHead>Cupos</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead className="text-right">Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredVacancies.length > 0 ? (
-                    filteredVacancies.map((vacancy) => {
-                      const currentApps = vacancy.applications?.length || 0;
-                      const availableSlots = vacancy.maxApplicants - currentApps;
-                      
+          <CardHeader>
+            <CardTitle>Lista de Vacantes ({filteredVacancies.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent"></div>
+              </div>
+            ) : filteredVacancies.length === 0 ? (
+              <p className="text-center text-muted-foreground py-12">No se encontraron vacantes</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Titulo</TableHead>
+                      <TableHead>Empresa</TableHead>
+                      <TableHead>Modalidad</TableHead>
+                      <TableHead>Seniority</TableHead>
+                      <TableHead>Cupos</TableHead>
+                      <TableHead>Estado</TableHead>
+                      <TableHead className="text-right">Acciones</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredVacancies.map((vacancy) => {
+                      const modalityInfo = getModalityBadge(vacancy.modality);
                       return (
                         <TableRow key={vacancy.id}>
-                          <TableCell>
-                            <div>
-                              <p className="font-medium">{vacancy.title}</p>
-                              <p className="text-xs text-muted-foreground">{vacancy.location}</p>
-                            </div>
-                          </TableCell>
+                          <TableCell className="font-medium">{vacancy.title}</TableCell>
                           <TableCell>{vacancy.company}</TableCell>
                           <TableCell>
-                            <Badge variant="outline" className={cn('border', getModalityBadge(vacancy.modality))}>
-                              {getModalityLabel(vacancy.modality)}
+                            <Badge variant="outline" className={modalityInfo.style}>
+                              {modalityInfo.label}
                             </Badge>
                           </TableCell>
+                          <TableCell>{vacancy.seniority}</TableCell>
                           <TableCell>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <Users className="w-4 h-4 text-muted-foreground" />
-                              <span className={cn(
-                                availableSlots === 0 && 'text-destructive font-medium'
-                              )}>
-                                {currentApps}/{vacancy.maxApplicants}
-                              </span>
+                              {vacancy.maxApplicants}
                             </div>
                           </TableCell>
                           <TableCell>
@@ -252,38 +243,42 @@ const VacanciesPage = () => {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
-                            <div className="flex justify-end gap-1">
-                              <Button 
-                                size="icon" 
+                            <div className="flex justify-end gap-2">
+                              <Button
                                 variant="ghost"
+                                size="icon"
                                 onClick={() => navigate(`/vacancies/${vacancy.id}`)}
                               >
                                 <Eye className="w-4 h-4" />
                               </Button>
-                              <Button 
-                                size="icon" 
-                                variant="ghost"
-                                onClick={() => navigate(`/vacancies/${vacancy.id}/edit`)}
-                              >
-                                <Pencil className="w-4 h-4" />
-                              </Button>
-                              <Button 
-                                size="icon" 
-                                variant="ghost"
-                                onClick={() => handleToggleActive(vacancy)}
-                              >
-                                {vacancy.isActive ? (
-                                  <ToggleRight className="w-4 h-4 text-success" />
-                                ) : (
-                                  <ToggleLeft className="w-4 h-4 text-muted-foreground" />
-                                )}
-                              </Button>
-                              {hasRole([UserRole.ADMIN]) && (
-                                <Button 
-                                  size="icon" 
-                                  variant="ghost" 
-                                  className="text-destructive hover:text-destructive"
+                              {canManageVacancies && (
+                                <>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => navigate(`/vacancies/edit/${vacancy.id}`)}
+                                  >
+                                    <Pencil className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleToggleActive(vacancy)}
+                                  >
+                                    {vacancy.isActive ? (
+                                      <ToggleRight className="w-4 h-4 text-success" />
+                                    ) : (
+                                      <ToggleLeft className="w-4 h-4 text-muted-foreground" />
+                                    )}
+                                  </Button>
+                                </>
+                              )}
+                              {isAdmin && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
                                   onClick={() => handleDelete(vacancy)}
+                                  className="text-destructive hover:text-destructive"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -292,18 +287,11 @@ const VacanciesPage = () => {
                           </TableCell>
                         </TableRow>
                       );
-                    })
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-12">
-                        <Briefcase className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                        <p className="text-muted-foreground">No se encontraron vacantes</p>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

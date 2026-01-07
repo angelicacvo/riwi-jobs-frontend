@@ -39,12 +39,18 @@ const CoderDashboard = () => {
   const canApply = activeApplicationsCount < maxApplications;
 
   const getModalityBadge = (modality: string) => {
-    const styles = {
+    const modalityUpper = modality.toUpperCase();
+    const styles: Record<string, string> = {
       REMOTE: 'bg-success/10 text-success border-success/20',
       ONSITE: 'bg-warning/10 text-warning border-warning/20',
       HYBRID: 'bg-accent/10 text-accent border-accent/20',
     };
-    return styles[modality as keyof typeof styles] || 'bg-muted text-muted-foreground';
+    const labels: Record<string, string> = {
+      REMOTE: 'Remoto',
+      ONSITE: 'Presencial',
+      HYBRID: 'Hibrido',
+    };
+    return { style: styles[modalityUpper] || '', label: labels[modalityUpper] || modality };
   };
 
   if (isLoading) {
@@ -57,85 +63,66 @@ const CoderDashboard = () => {
 
   return (
     <div className="space-y-8">
-      {/* Application Counter */}
-      <Card className={cn(
-        'border-2',
-        activeApplicationsCount >= maxApplications ? 'border-destructive/50 bg-destructive/5' : 'border-accent/30 bg-accent/5'
-      )}>
-        <CardContent className="py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className={cn(
-                'w-12 h-12 rounded-full flex items-center justify-center',
-                activeApplicationsCount >= maxApplications ? 'bg-destructive/20' : 'bg-accent/20'
-              )}>
-                <FileText className={cn(
-                  'w-6 h-6',
-                  activeApplicationsCount >= maxApplications ? 'text-destructive' : 'text-accent'
-                )} />
-              </div>
-              <div>
-                <p className="text-lg font-bold">
-                  Postulaciones activas: {activeApplicationsCount}/{maxApplications}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {canApply 
-                    ? `Puedes postularte a ${maxApplications - activeApplicationsCount} vacante(s) más`
-                    : 'Has alcanzado el límite de postulaciones activas'}
-                </p>
-              </div>
-            </div>
-            <Button asChild variant="outline">
-              <Link to="/applications">Ver mis postulaciones</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Quick Actions */}
-      <div className="flex flex-wrap gap-3">
-        <Button asChild className="gradient-accent hover:opacity-90">
-          <Link to="/explore"><Search className="w-4 h-4 mr-2" />Explorar Vacantes</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link to="/applications"><FileText className="w-4 h-4 mr-2" />Mis Postulaciones</Link>
-        </Button>
+      {/* Quick Actions & Status */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap gap-3">
+          <Button asChild className="gradient-accent hover:opacity-90">
+            <Link to="/explore"><Search className="w-4 h-4 mr-2" />Explorar Vacantes</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/applications"><FileText className="w-4 h-4 mr-2" />Mis Postulaciones</Link>
+          </Button>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-lg">
+          <span className="text-sm text-muted-foreground">Postulaciones activas:</span>
+          <span className={cn("font-bold", canApply ? "text-success" : "text-destructive")}>
+            {activeApplicationsCount}/{maxApplications}
+          </span>
+        </div>
       </div>
 
-      {/* My Applications */}
-      {myApplications.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <FileText className="w-5 h-5" />
-              Mis Postulaciones
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {myApplications.map((app) => (
-                <div key={app.id} className="p-4 border rounded-lg bg-card hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <p className="font-semibold text-foreground">{app.vacancy?.title}</p>
-                      <p className="text-sm text-muted-foreground">{app.vacancy?.company}</p>
-                    </div>
-                    <Badge variant={app.vacancy?.isActive ? 'default' : 'secondary'}>
-                      {app.vacancy?.isActive ? 'Activa' : 'Inactiva'}
-                    </Badge>
+      {/* My Applications Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <FileText className="w-5 h-5" />
+            Mis Postulaciones
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {myApplications.length > 0 ? (
+            <div className="space-y-3">
+              {myApplications.slice(0, 3).map((app) => (
+                <Link
+                  key={app.id}
+                  to={`/vacancies/${app.vacancyId}`}
+                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                >
+                  <div>
+                    <p className="font-medium">{app.vacancy?.title || 'Vacante'}</p>
+                    <p className="text-sm text-muted-foreground">{app.vacancy?.company}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-3">
-                    Postulado: {new Date(app.appliedAt).toLocaleDateString()}
-                  </p>
-                  <Button asChild size="sm" variant="outline" className="w-full">
-                    <Link to={`/vacancies/${app.vacancyId}`}>Ver Vacante</Link>
-                  </Button>
-                </div>
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(app.appliedAt).toLocaleDateString()}
+                  </span>
+                </Link>
               ))}
+              {myApplications.length > 3 && (
+                <Link to="/applications" className="block text-center text-sm text-accent hover:underline">
+                  Ver todas ({myApplications.length})
+                </Link>
+              )}
             </div>
-          </CardContent>
-        </Card>
-      )}
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground mb-4">Aun no tienes postulaciones</p>
+              <Button asChild className="gradient-accent">
+                <Link to="/explore">Explorar Vacantes</Link>
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Available Vacancies */}
       <div>
@@ -144,65 +131,63 @@ const CoderDashboard = () => {
             <Briefcase className="w-5 h-5" />
             Vacantes Disponibles
           </h2>
-          <Button asChild variant="ghost">
-            <Link to="/explore">Ver todas</Link>
-          </Button>
+          <Link to="/explore" className="text-sm text-accent hover:underline">
+            Ver todas
+          </Link>
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {vacancies.slice(0, 6).map((vacancy) => {
+            const modalityInfo = getModalityBadge(vacancy.modality);
+            const hasApplied = myApplications.some(app => app.vacancyId === vacancy.id);
 
-        {vacancies.length > 0 ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {vacancies.map((vacancy) => (
-              <Card key={vacancy.id} className="hover:shadow-lg transition-all duration-200 group">
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <Badge className={cn('border', getModalityBadge(vacancy.modality))}>
-                      {vacancy.modality === 'REMOTE' ? 'Remoto' : vacancy.modality === 'ONSITE' ? 'Presencial' : 'Híbrido'}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {vacancy.maxApplicants - (vacancy.applications?.length || 0)} cupos
-                    </span>
-                  </div>
-                  
-                  <h3 className="font-bold text-lg mb-2 group-hover:text-accent transition-colors">
-                    {vacancy.title}
-                  </h3>
-                  
-                  <div className="space-y-1 mb-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <Building2 className="w-4 h-4" />
-                      <span>{vacancy.company}</span>
+            return (
+              <Link
+                key={vacancy.id}
+                to={`/vacancies/${vacancy.id}`}
+                className="group"
+              >
+                <Card className="h-full transition-all duration-200 hover:shadow-lg hover:border-accent/50">
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-semibold group-hover:text-accent transition-colors">
+                          {vacancy.title}
+                        </h3>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <Building2 className="w-3.5 h-3.5" />
+                          {vacancy.company}
+                        </div>
+                      </div>
+                      {hasApplied && (
+                        <Badge variant="secondary" className="text-xs">Postulado</Badge>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
-                      <span>{vacancy.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="w-4 h-4" />
-                      <span>{vacancy.salaryRange}</span>
-                    </div>
-                  </div>
 
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {vacancy.technologies.split(',').slice(0, 3).map((tech, i) => (
-                      <span key={i} className="px-2 py-0.5 text-xs bg-primary/10 text-primary rounded-full">
-                        {tech.trim()}
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <Badge variant="outline" className={modalityInfo.style}>
+                        {modalityInfo.label}
+                      </Badge>
+                      <Badge variant="outline">
+                        {vacancy.seniority}
+                      </Badge>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5" />
+                        {vacancy.location}
                       </span>
-                    ))}
-                  </div>
-
-                  <Button asChild className="w-full" variant="outline">
-                    <Link to={`/vacancies/${vacancy.id}`}>Ver Detalles</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <Card className="p-12 text-center">
-            <Briefcase className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No hay vacantes disponibles en este momento</p>
-          </Card>
-        )}
+                      <span className="flex items-center gap-1">
+                        <DollarSign className="w-3.5 h-3.5" />
+                        {vacancy.salaryRange}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

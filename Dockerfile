@@ -1,8 +1,14 @@
-# Dockerfile for Riwi Jobs Frontend
-# Multi-stage build for Railway deployment
-# Optimized for production with Nginx
+# ==========================================
+# Dockerfile - Riwi Jobs Frontend
+# ==========================================
+# Multi-stage build for production
+# Stack: React + Vite + TypeScript + Nginx
+# Compatible: Railway + Docker Compose
+# ==========================================
 
-# Stage 1: Build stage
+# ========================================
+# Stage 1: Build Stage
+# ========================================
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -16,10 +22,20 @@ RUN npm ci && npm cache clean --force
 # Copy source code
 COPY . .
 
-# Build the application
+# Build arguments for environment variables
+ARG VITE_API_URL
+ARG VITE_API_KEY
+
+# Set environment variables for build
+ENV VITE_API_URL=${VITE_API_URL:-https://riwi-jobs-production.up.railway.app}
+ENV VITE_API_KEY=${VITE_API_KEY:-angelica-secure-api-key-2026}
+
+# Build the application (VITE variables are embedded here)
 RUN npm run build
 
-# Stage 2: Production stage with Nginx
+# ========================================
+# Stage 2: Production Stage (Nginx)
+# ========================================
 FROM nginx:alpine
 
 # Install dumb-init for proper signal handling

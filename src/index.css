@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Riwi Jobs Design System - Inspired by Riwi.io */
+/* Riwi Jobs Design System */
 
 @layer base {
   :root {
@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 50% 12%;
 
-    /* Primary: Deep Navy/Purple from Riwi (#1a1f3a - dark blue) */
+    /* Primary: Deep Navy/Purple from Riwi */
     --primary: 240 50% 12%;
     --primary-foreground: 0 0% 100%;
 
@@ -27,7 +27,7 @@
     --muted: 240 20% 96%;
     --muted-foreground: 240 10% 45%;
 
-    /* Accent: Coral/Orange from Riwi (#ff6b35 - coral orange) */
+    /* Accent: Coral/Orange from Riwi */
     --accent: 14 100% 60%;
     --accent-foreground: 0 0% 100%;
 
@@ -58,7 +58,7 @@
     --sidebar-border: 240 40% 18%;
     --sidebar-ring: 14 100% 60%;
 
-    /* Custom gradients - Riwi inspired */
+    /* Custom gradients */
     --gradient-primary: linear-gradient(135deg, hsl(240 50% 12%) 0%, hsl(250 55% 25%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(14 100% 60%) 0%, hsl(20 100% 55%) 100%);
     --gradient-hero: linear-gradient(180deg, hsl(240 50% 10%) 0%, hsl(250 55% 20%) 100%);
@@ -166,11 +166,11 @@
   }
 
   @keyframes slideUp {
-    from { 
+    from {
       opacity: 0;
       transform: translateY(10px);
     }
-    to { 
+    to {
       opacity: 1;
       transform: translateY(0);
     }

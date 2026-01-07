@@ -15,7 +15,6 @@ import VacancyFormPage from "./pages/VacancyFormPage";
 import ExplorePage from "./pages/ExplorePage";
 import ApplicationsPage from "./pages/ApplicationsPage";
 import ProfilePage from "./pages/ProfilePage";
-import MetricsPage from "./pages/MetricsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,12 +33,11 @@ const App = () => (
             <Route path="/users" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN]}><UsersPage /></ProtectedRoute>} />
             <Route path="/vacancies" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.GESTOR]}><VacanciesPage /></ProtectedRoute>} />
             <Route path="/vacancies/new" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.GESTOR]}><VacancyFormPage /></ProtectedRoute>} />
+            <Route path="/vacancies/edit/:id" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.GESTOR]}><VacancyFormPage /></ProtectedRoute>} />
             <Route path="/vacancies/:id" element={<ProtectedRoute><VacancyDetailPage /></ProtectedRoute>} />
-            <Route path="/vacancies/:id/edit" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.GESTOR]}><VacancyFormPage /></ProtectedRoute>} />
             <Route path="/explore" element={<ProtectedRoute allowedRoles={[UserRole.CODER]}><ExplorePage /></ProtectedRoute>} />
             <Route path="/applications" element={<ProtectedRoute><ApplicationsPage /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-            <Route path="/metrics" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.GESTOR]}><MetricsPage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

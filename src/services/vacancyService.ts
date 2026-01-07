@@ -11,7 +11,9 @@ export const vacancyService = {
         }
       });
     }
-    const response = await api.get<{ data: Vacancy[] }>(`/vacancies?${params.toString()}`);
+    const queryString = params.toString();
+    const url = queryString ? `/vacancies?${queryString}` : '/vacancies';
+    const response = await api.get<{ data: Vacancy[] }>(url);
     return response.data.data;
   },
 

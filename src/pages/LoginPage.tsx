@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -15,15 +15,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Eye, EyeOff, Code2, Loader2 } from 'lucide-react';
 
 const loginSchema = z.object({
-  email: z.string().email('Email inválido').min(1, 'El email es requerido'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+  email: z.string().email('Email invalido').min(1, 'El email es requerido'),
+  password: z.string().min(6, 'La contrasena debe tener al menos 6 caracteres'),
 });
 
 const registerSchema = z.object({
   name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  email: z.string().email('Email inválido').min(1, 'El email es requerido'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
-  role: z.nativeEnum(UserRole, { errorMap: () => ({ message: 'Selecciona un rol' }) }),
+  email: z.string().email('Email invalido').min(1, 'El email es requerido'),
+  password: z.string().min(6, 'La contrasena debe tener al menos 6 caracteres'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -36,7 +35,6 @@ const LoginPage = () => {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard', { replace: true });
@@ -50,7 +48,7 @@ const LoginPage = () => {
 
   const registerForm = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { name: '', email: '', password: '', role: UserRole.CODER },
+    defaultValues: { name: '', email: '', password: '' },
   });
 
   const handleLogin = async (data: LoginFormData) => {
@@ -58,18 +56,18 @@ const LoginPage = () => {
     try {
       const response = await authService.login(data.email, data.password);
       login(response.access_token, response.user);
-      
+
       Swal.fire({
         icon: 'success',
-        title: '¡Bienvenido!',
+        title: 'Bienvenido!',
         text: `Hola ${response.user.name}`,
         timer: 2000,
         showConfirmButton: false,
       });
-      
+
       navigate('/dashboard');
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Error al iniciar sesión';
+      const message = error.response?.data?.message || 'Error al iniciar sesion';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -84,15 +82,15 @@ const LoginPage = () => {
   const handleRegister = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      await authService.register(data.name, data.email, data.password, data.role);
-      
+      await authService.register(data.name, data.email, data.password);
+
       Swal.fire({
         icon: 'success',
-        title: '¡Registro exitoso!',
-        text: 'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
+        title: 'Registro exitoso!',
+        text: 'Tu cuenta ha sido creada. Ahora puedes iniciar sesion.',
         confirmButtonColor: 'hsl(240, 50%, 12%)',
       });
-      
+
       setIsLogin(true);
       registerForm.reset();
     } catch (error: any) {
@@ -122,11 +120,11 @@ const LoginPage = () => {
         <Card className="shadow-lg border-0">
           <CardHeader className="text-center pb-4">
             <CardTitle className="text-2xl font-bold">
-              {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
+              {isLogin ? 'Iniciar Sesion' : 'Crear Cuenta'}
             </CardTitle>
             <CardDescription>
-              {isLogin 
-                ? 'Ingresa tus credenciales para acceder' 
+              {isLogin
+                ? 'Ingresa tus credenciales para acceder'
                 : 'Completa el formulario para registrarte'}
             </CardDescription>
           </CardHeader>
@@ -149,12 +147,12 @@ const LoginPage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Contraseña</Label>
+                  <Label htmlFor="password">Contrasena</Label>
                   <div className="relative">
                     <Input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="••••••••"
+                      placeholder="********"
                       {...loginForm.register('password')}
                       className="h-11 pr-10"
                     />
@@ -173,8 +171,8 @@ const LoginPage = () => {
                   )}
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full h-11 gradient-accent hover:opacity-90 transition-opacity"
                   disabled={isLoading}
                 >
@@ -184,7 +182,7 @@ const LoginPage = () => {
                       Ingresando...
                     </>
                   ) : (
-                    'Iniciar Sesión'
+                    'Iniciar Sesion'
                   )}
                 </Button>
               </form>
@@ -195,7 +193,7 @@ const LoginPage = () => {
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Juan Pérez"
+                    placeholder="Juan Perez"
                     {...registerForm.register('name')}
                     className="h-11"
                   />
@@ -219,12 +217,12 @@ const LoginPage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="reg-password">Contraseña</Label>
+                  <Label htmlFor="reg-password">Contrasena</Label>
                   <div className="relative">
                     <Input
                       id="reg-password"
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="••••••••"
+                      placeholder="********"
                       {...registerForm.register('password')}
                       className="h-11 pr-10"
                     />
@@ -243,28 +241,8 @@ const LoginPage = () => {
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="role">Rol</Label>
-                  <Select
-                    value={registerForm.watch('role')}
-                    onValueChange={(value) => registerForm.setValue('role', value as UserRole)}
-                  >
-                    <SelectTrigger className="h-11">
-                      <SelectValue placeholder="Selecciona un rol" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={UserRole.CODER}>Coder - Busco empleo</SelectItem>
-                      <SelectItem value={UserRole.GESTOR}>Gestor - Publico vacantes</SelectItem>
-                      <SelectItem value={UserRole.ADMIN}>Admin - Administrador</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {registerForm.formState.errors.role && (
-                    <p className="text-sm text-destructive">{registerForm.formState.errors.role.message}</p>
-                  )}
-                </div>
-
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full h-11 gradient-accent hover:opacity-90 transition-opacity"
                   disabled={isLoading}
                 >
@@ -283,7 +261,7 @@ const LoginPage = () => {
 
           <CardFooter className="flex justify-center border-t pt-4">
             <p className="text-sm text-muted-foreground">
-              {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}
+              {isLogin ? 'No tienes cuenta?' : 'Ya tienes cuenta?'}
               <Button
                 variant="link"
                 className="text-accent font-semibold px-1"
@@ -293,7 +271,7 @@ const LoginPage = () => {
                   registerForm.reset();
                 }}
               >
-                {isLogin ? 'Regístrate aquí' : 'Inicia sesión'}
+                {isLogin ? 'Registrate aqui' : 'Inicia sesion'}
               </Button>
             </p>
           </CardFooter>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Briefcase, FileText, TrendingUp, Plus, BarChart } from 'lucide-react';
+import { Briefcase, FileText, TrendingUp, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import StatsCard from './StatsCard';
@@ -53,43 +53,36 @@ const GestorDashboard = () => {
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3">
         <Button asChild className="gradient-accent hover:opacity-90">
-          <Link to="/vacancies/new"><Plus className="w-4 h-4 mr-2" />Crear Vacante</Link>
+          <Link to="/vacancies/new"><Plus className="w-4 h-4 mr-2" />Nueva Vacante</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link to="/vacancies"><Briefcase className="w-4 h-4 mr-2" />Mis Vacantes</Link>
+          <Link to="/vacancies"><Briefcase className="w-4 h-4 mr-2" />Gestionar Vacantes</Link>
         </Button>
         <Button asChild variant="outline">
           <Link to="/applications"><FileText className="w-4 h-4 mr-2" />Ver Postulaciones</Link>
         </Button>
-        <Button asChild variant="outline">
-          <Link to="/metrics"><BarChart className="w-4 h-4 mr-2" />Métricas</Link>
-        </Button>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard
-          title="Total Vacantes"
-          value={vacancyStats?.totalVacancies || 0}
-          icon={Briefcase}
-          variant="accent"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatsCard
           title="Vacantes Activas"
           value={vacancyStats?.activeVacancies || 0}
-          icon={TrendingUp}
-          variant="success"
-        />
-        <StatsCard
-          title="Vacantes Inactivas"
-          value={vacancyStats?.inactiveVacancies || 0}
           icon={Briefcase}
+          variant="success"
+          description={`${vacancyStats?.totalVacancies || 0} totales`}
         />
         <StatsCard
           title="Total Postulaciones"
           value={appStats?.totalApplications || 0}
           icon={FileText}
           variant="warning"
+        />
+        <StatsCard
+          title="Vacantes con Cupos"
+          value={vacancyStats?.vacanciesWithAvailableSlots || 0}
+          icon={TrendingUp}
+          variant="accent"
         />
       </div>
 
@@ -98,86 +91,77 @@ const GestorDashboard = () => {
         {/* Popular Vacancies */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Vacantes más Populares</CardTitle>
+            <CardTitle className="text-lg">Vacantes mas Populares</CardTitle>
           </CardHeader>
           <CardContent>
-            {barData.length > 0 ? (
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RechartsBarChart data={barData} layout="vertical">
-                    <XAxis type="number" />
-                    <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 12 }} />
-                    <Tooltip />
-                    <Bar dataKey="postulaciones" fill="hsl(12, 80%, 60%)" radius={[0, 4, 4, 0]} />
-                  </RechartsBarChart>
-                </ResponsiveContainer>
-              </div>
-            ) : (
-              <p className="text-muted-foreground text-center py-8">No hay datos disponibles</p>
-            )}
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsBarChart data={barData} layout="vertical">
+                  <XAxis type="number" />
+                  <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Bar dataKey="postulaciones" fill="hsl(12, 80%, 60%)" radius={[0, 4, 4, 0]} />
+                </RechartsBarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
-        {/* Recent Applications */}
+        {/* Recent Vacancies */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Postulaciones Recientes</CardTitle>
+            <CardTitle className="text-lg">Vacantes Recientes</CardTitle>
           </CardHeader>
           <CardContent>
-            {appStats?.recentApplications && appStats.recentApplications.length > 0 ? (
+            {vacancyStats?.mostRecentVacancies && vacancyStats.mostRecentVacancies.length > 0 ? (
               <div className="space-y-3">
-                {appStats.recentApplications.slice(0, 5).map((app) => (
-                  <div key={app.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                {vacancyStats.mostRecentVacancies.slice(0, 5).map((vacancy) => (
+                  <Link
+                    key={vacancy.id}
+                    to={`/vacancies/${vacancy.id}`}
+                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                  >
                     <div>
-                      <p className="font-medium">{app.user?.name || 'Usuario'}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {app.vacancy?.title || 'Vacante'}
-                      </p>
+                      <p className="font-medium">{vacancy.title}</p>
+                      <p className="text-sm text-muted-foreground">{vacancy.company}</p>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(app.appliedAt).toLocaleDateString()}
+                    <span className={`text-xs px-2 py-1 rounded-full ${vacancy.isActive ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'}`}>
+                      {vacancy.isActive ? 'Activa' : 'Inactiva'}
                     </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground text-center py-8">No hay postulaciones recientes</p>
+              <p className="text-muted-foreground text-center py-8">No hay vacantes recientes</p>
             )}
           </CardContent>
         </Card>
       </div>
 
-      {/* Recent Vacancies */}
+      {/* Recent Applications */}
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg">Vacantes Recientes</CardTitle>
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/vacancies">Ver todas</Link>
-          </Button>
+        <CardHeader>
+          <CardTitle className="text-lg">Postulaciones Recientes</CardTitle>
         </CardHeader>
         <CardContent>
-          {vacancyStats?.mostRecentVacancies && vacancyStats.mostRecentVacancies.length > 0 ? (
-            <div className="grid gap-3">
-              {vacancyStats.mostRecentVacancies.slice(0, 3).map((vacancy) => (
-                <div key={vacancy.id} className="flex items-center justify-between p-4 border rounded-lg">
+          {appStats?.recentApplications && appStats.recentApplications.length > 0 ? (
+            <div className="space-y-3">
+              {appStats.recentApplications.slice(0, 5).map((app) => (
+                <div key={app.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                   <div>
-                    <p className="font-medium">{vacancy.title}</p>
-                    <p className="text-sm text-muted-foreground">{vacancy.company}</p>
+                    <p className="font-medium">{app.user?.name || 'Usuario'}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Se postulo a {app.vacancy?.title || 'Vacante'}
+                    </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      vacancy.isActive 
-                        ? 'bg-success/10 text-success' 
-                        : 'bg-muted text-muted-foreground'
-                    }`}>
-                      {vacancy.isActive ? 'Activa' : 'Inactiva'}
-                    </span>
-                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(app.appliedAt).toLocaleDateString()}
+                  </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-muted-foreground text-center py-8">No hay vacantes recientes</p>
+            <p className="text-muted-foreground text-center py-8">No hay postulaciones recientes</p>
           )}
         </CardContent>
       </Card>

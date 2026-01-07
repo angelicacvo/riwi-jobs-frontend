@@ -1,13 +1,13 @@
 export enum UserRole {
-  ADMIN = "ADMIN",
-  GESTOR = "GESTOR",
-  CODER = "CODER"
+  ADMIN = "administrator",
+  GESTOR = "manager",
+  CODER = "developer"
 }
 
 export enum ModalityEnum {
-  REMOTE = "REMOTE",
-  ONSITE = "ONSITE",
-  HYBRID = "HYBRID"
+  REMOTE = "remote",
+  ONSITE = "onsite",
+  HYBRID = "hybrid"
 }
 
 export interface User {
@@ -26,7 +26,7 @@ export interface Vacancy {
   seniority: string;
   softSkills?: string;
   location: string;
-  modality: ModalityEnum;
+  modality: string;
   salaryRange: string;
   company: string;
   maxApplicants: number;
@@ -58,9 +58,7 @@ export interface ApiError {
 export interface UserStats {
   totalUsers: number;
   usersByRole: {
-    ADMIN: number;
-    GESTOR: number;
-    CODER: number;
+    [key: string]: number;
   };
   recentUsers: User[];
 }
@@ -120,7 +118,7 @@ export interface CreateVacancyDto {
   seniority: string;
   softSkills?: string;
   location: string;
-  modality: ModalityEnum;
+  modality: string;
   salaryRange: string;
   company: string;
   maxApplicants: number;
@@ -129,7 +127,7 @@ export interface CreateVacancyDto {
 export interface VacancyFilters {
   company?: string;
   location?: string;
-  modality?: ModalityEnum;
+  modality?: string;
   isActive?: boolean;
   hasAvailableSlots?: boolean;
   page?: number;
