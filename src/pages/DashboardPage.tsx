@@ -23,12 +23,12 @@ const DashboardPage = () => {
 
   return (
     <Layout>
-      <div className="animate-fade-in">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">
+      <div className="animate-fade-in max-w-7xl mx-auto">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
             Hola, {user?.name}!
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm md:text-base text-muted-foreground mt-1">
             Bienvenido a tu panel de {user?.role.toLowerCase()}
           </p>
         </div>

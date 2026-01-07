@@ -10,11 +10,13 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Code2
+  Code2,
+  Menu,
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 
 interface NavItem {
@@ -33,13 +35,22 @@ const navItems: NavItem[] = [
   { label: 'Mi Perfil', href: '/profile', icon: User, roles: [UserRole.ADMIN, UserRole.GESTOR, UserRole.CODER] },
 ];
 
-const Sidebar = () => {
+interface SidebarProps {
+  mobileOpen: boolean;
+  onMobileClose: () => void;
+}
+
+const Sidebar = ({ mobileOpen, onMobileClose }: SidebarProps) => {
   const { user, hasRole, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
   const filteredItems = navItems.filter(item => hasRole(item.roles));
+
+  useEffect(() => {
+    onMobileClose();
+  }, [location.pathname]);
 
   const handleLogout = () => {
     Swal.fire({
@@ -73,13 +84,25 @@ const Sidebar = () => {
   };
 
   return (
-    <aside
-      className={cn(
-        "fixed left-0 top-0 z-40 h-screen transition-all duration-300 flex flex-col",
-        "bg-sidebar text-sidebar-foreground border-r border-sidebar-border",
-        collapsed ? "w-16" : "w-64"
+    <>
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={onMobileClose}
+        />
       )}
-    >
+
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 h-screen transition-all duration-300 flex flex-col",
+          "bg-sidebar text-sidebar-foreground border-r border-sidebar-border",
+          collapsed ? "w-16" : "w-64",
+          "md:translate-x-0",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
       {/* Logo */}
       <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
         {!collapsed && (
@@ -151,6 +174,7 @@ const Sidebar = () => {
         </Button>
       </div>
     </aside>
+    </>
   );
 };
 

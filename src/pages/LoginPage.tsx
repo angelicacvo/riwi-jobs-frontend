@@ -43,11 +43,13 @@ const LoginPage = () => {
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
     defaultValues: { email: '', password: '' },
   });
 
   const registerForm = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: 'onBlur',
     defaultValues: { name: '', email: '', password: '' },
   });
 
@@ -138,11 +140,12 @@ const LoginPage = () => {
                     id="email"
                     type="email"
                     placeholder="tu@email.com"
+                    autoComplete="email"
                     {...loginForm.register('email')}
                     className="h-11"
                   />
                   {loginForm.formState.errors.email && (
-                    <p className="text-sm text-destructive">{loginForm.formState.errors.email.message}</p>
+                    <p className="text-sm text-destructive font-medium">{loginForm.formState.errors.email.message}</p>
                   )}
                 </div>
 
@@ -208,11 +211,12 @@ const LoginPage = () => {
                     id="reg-email"
                     type="email"
                     placeholder="tu@email.com"
+                    autoComplete="email"
                     {...registerForm.register('email')}
                     className="h-11"
                   />
                   {registerForm.formState.errors.email && (
-                    <p className="text-sm text-destructive">{registerForm.formState.errors.email.message}</p>
+                    <p className="text-sm text-destructive font-medium">{registerForm.formState.errors.email.message}</p>
                   )}
                 </div>
 

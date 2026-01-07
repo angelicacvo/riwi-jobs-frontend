@@ -35,7 +35,7 @@ const VacancyDetailPage = () => {
         setVacancy(vacancyData);
         setMyApplications(applicationsData);
       } catch (error) {
-        console.error('Error fetching vacancy:', error);
+        // Error handled by service
       } finally {
         setIsLoading(false);
       }

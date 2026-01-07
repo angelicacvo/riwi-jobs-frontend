@@ -19,7 +19,6 @@ const ApplicationsPage = () => {
 
   const isCoder = hasRole([UserRole.CODER]);
   const isAdmin = hasRole([UserRole.ADMIN]);
-  const canManageApplications = hasRole([UserRole.ADMIN, UserRole.GESTOR]);
 
   useEffect(() => {
     fetchApplications();
@@ -42,19 +41,12 @@ const ApplicationsPage = () => {
       const data = await applicationService.getAll();
       setApplications(data);
     } catch (error) {
-      console.error('Error fetching applications:', error);
+      // Error handled by service
     } finally {
       setIsLoading(false);
     }
   };
 
-  const canDeleteApplication = (app: Application): boolean => {
-    // Solo Admin puede eliminar postulaciones
-    if (isAdmin) return true;
-    // Coder solo puede eliminar sus propias postulaciones
-    if (isCoder && app.userId === user?.id) return true;
-    return false;
-  };
 
   const handleDelete = async (app: Application) => {
     const result = await Swal.fire({

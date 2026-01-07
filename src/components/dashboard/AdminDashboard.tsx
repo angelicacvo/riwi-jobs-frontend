@@ -8,9 +8,7 @@ import { userService } from '@/services/userService';
 import { vacancyService } from '@/services/vacancyService';
 import { applicationService } from '@/services/applicationService';
 import { UserStats, VacancyStats, ApplicationStats, PopularVacancy } from '@/types';
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart as RechartsBarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
-
-const COLORS = ['hsl(12, 80%, 60%)', 'hsl(160, 84%, 39%)', 'hsl(38, 92%, 50%)'];
+import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const AdminDashboard = () => {
   const [userStats, setUserStats] = useState<UserStats | null>(null);
@@ -33,19 +31,13 @@ const AdminDashboard = () => {
         setAppStats(apps);
         setPopularVacancies(popular.slice(0, 5));
       } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+        // Error handled by service
       } finally {
         setIsLoading(false);
       }
     };
     fetchData();
   }, []);
-
-  const pieData = userStats ? [
-    { name: 'Admin', value: userStats.usersByRole.ADMIN },
-    { name: 'Gestor', value: userStats.usersByRole.GESTOR },
-    { name: 'Coder', value: userStats.usersByRole.CODER },
-  ] : [];
 
   const barData = popularVacancies.map(v => ({
     name: v.title.length > 20 ? v.title.substring(0, 20) + '...' : v.title,
@@ -103,43 +95,33 @@ const AdminDashboard = () => {
         />
       </div>
 
-      {/* Charts */}
+      {/* Charts and Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* User Distribution */}
+        {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Distribucion de Usuarios</CardTitle>
+            <CardTitle className="text-lg">Actividad Reciente</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ${value}`}
-                  >
-                    {pieData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="flex justify-center gap-6 mt-4">
-              {pieData.map((entry, index) => (
-                <div key={entry.name} className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index] }} />
-                  <span className="text-sm text-muted-foreground">{entry.name}</span>
-                </div>
-              ))}
-            </div>
+            {appStats?.recentApplications && appStats.recentApplications.length > 0 ? (
+              <div className="space-y-3">
+                {appStats.recentApplications.slice(0, 5).map((app) => (
+                  <div key={app.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <div>
+                      <p className="font-medium">{app.user?.name || 'Usuario'}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Se postulo a {app.vacancy?.title || 'Vacante'}
+                      </p>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(app.appliedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-8">No hay actividad reciente</p>
+            )}
           </CardContent>
         </Card>
 
@@ -170,34 +152,6 @@ const AdminDashboard = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Actividad Reciente</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {appStats?.recentApplications && appStats.recentApplications.length > 0 ? (
-            <div className="space-y-3">
-              {appStats.recentApplications.slice(0, 5).map((app) => (
-                <div key={app.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <div>
-                    <p className="font-medium">{app.user?.name || 'Usuario'}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Se postulo a {app.vacancy?.title || 'Vacante'}
-                    </p>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(app.appliedAt).toLocaleDateString()}
-                  </span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-muted-foreground text-center py-8">No hay actividad reciente</p>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 };

@@ -1,7 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import Sidebar from './Sidebar';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Menu } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,6 +11,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const { isAuthenticated, isLoading } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -24,9 +27,20 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Sidebar />
-      <main className="ml-16 md:ml-64 transition-all duration-300">
-        <div className="p-6 md:p-8">
+      <Sidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+      
+      {/* Mobile menu button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="fixed top-4 left-4 z-30 md:hidden"
+        onClick={() => setMobileOpen(true)}
+      >
+        <Menu className="w-6 h-6" />
+      </Button>
+
+      <main className="md:ml-64 transition-all duration-300">
+        <div className="p-6 md:p-8 pt-16 md:pt-6">
           {children}
         </div>
       </main>

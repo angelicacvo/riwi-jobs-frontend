@@ -55,7 +55,7 @@ const VacanciesPage = () => {
       const data = await vacancyService.getAll();
       setVacancies(data);
     } catch (error) {
-      console.error('Error fetching vacancies:', error);
+      // Error handled by service
     } finally {
       setIsLoading(false);
     }

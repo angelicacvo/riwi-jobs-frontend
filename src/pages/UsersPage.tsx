@@ -65,7 +65,7 @@ const UsersPage = () => {
       const data = await userService.getAll();
       setUsers(data);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      // Error handled by service
     } finally {
       setIsLoading(false);
     }

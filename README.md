@@ -1,103 +1,282 @@
 # Riwi Jobs Frontend
 
-<div align="center">
-
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 
-**Modern web application for job vacancy management and developer applications**
+Modern web application for job vacancy management and applications.
 
-[Live Demo](#production-urls) · [Installation](#installation-and-setup) · [Features](#main-features)
-
-</div>
-
----
-
-## 👨‍💻 Desarrollador
-
-**Angelica María Cuervo Marín**  
-Clan Ubuntu - Riwi  
-Ruta Avanzada Backend  
-📧 Email: angelica@riwi.io  
-📅 Enero 2026
+**Developer:** Angelica Maria Cuervo Marin  
+**Riwi - Clan Ubuntu**  
+Email: angelica@riwi.io  
+Date: January 2026
 
 ---
 
-## Project Description
+## Description
 
-**Riwi Jobs Frontend** is a modern web application built with **React**, **TypeScript**, and **Vite** that provides an intuitive interface for job vacancy management. This application consumes the **Riwi Jobs API** and offers different experiences based on user roles (Administrator, Manager, Developer).
+Modern web interface consuming the **Riwi Jobs API**, offering personalized experiences by user role (Admin, Manager, Developer).
 
-### Context
-
-This application was developed as part of the **Advanced Backend Route** project at **Riwi**, implementing modern frontend practices, responsive design, role-based routing, and complete integration with a REST API.
-
-### Target Audience
-
-- **Administrators**: Full dashboard with system statistics and complete user management
-- **Managers**: Vacancy creation and management dashboard, application monitoring
-- **Developers (Coders)**: Vacancy exploration interface and personal application tracking
+**Features by role:**
+- **Admin:** Full dashboard with statistics, user management, all vacancies/applications
+- **Manager:** Vacancy metrics dashboard, create/manage vacancies, monitor applications
+- **Coder:** Browse vacancies with filters, apply (max 3), track personal applications
 
 ---
 
-## Technologies Used
+## Production URL
 
-### Core Framework
-- **React v18** - JavaScript library for building user interfaces
-- **TypeScript v5** - JavaScript superset with static typing
-- **Vite v6** - Fast build tool and development server
-
-### Routing and State
-- **React Router DOM v7** - Client-side routing
-- **React Context API** - Global state management (authentication)
-
-### UI and Styling
-- **Tailwind CSS v3** - Utility-first CSS framework
-- **Shadcn/ui** - High-quality React components
-- **Lucide React** - Beautiful icon library
-- **Recharts** - Data visualization and charts
-
-### HTTP Client
-- **Axios** - Promise-based HTTP client for API calls
-
-### Production Server
-- **Nginx Alpine** - Lightweight web server for production
+**https://riwi-jobs-frontend.up.railway.app**
 
 ---
 
-## Project Architecture
+## Technologies
 
-The project follows a **modular component-based architecture**:
+- **React v18** + **TypeScript v5** - Modern typed UI
+- **Vite v6** - Ultra-fast build tool
+- **React Router DOM v7** - Role-based routing
+- **Tailwind CSS v3** - Responsive utility-first design
+- **Shadcn/ui** - High-quality UI components
+- **Recharts** - Interactive charts
+- **Axios** - HTTP client
+- **Lucide React** - Modern icons
+- **Nginx Alpine** - Production web server
+
+---
+
+## Project Structure
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── dashboard/       # Dashboard components by role
-│   ├── layout/          # Layout components (Sidebar, Layout)
+├── components/
+│   ├── dashboard/       # Dashboards by role (Admin, Manager, Coder)
+│   ├── layout/          # Main layout with Sidebar
 │   └── ui/              # Shadcn/ui base components
-├── contexts/            # React Context providers (Auth)
-├── hooks/               # Custom React hooks
+├── contexts/            # AuthContext for global state
+├── hooks/               # Custom hooks (mobile, toast)
 ├── pages/               # Main application pages
 ├── services/            # API service layer (axios)
-├── types/               # TypeScript type definitions
+├── types/               # TypeScript definitions
 └── lib/                 # Utilities and helpers
 ```
 
-### Applied Principles
+---
 
-- **Component Composition**: Reusable and composable components
-- **Type Safety**: Full TypeScript implementation
-- **Separation of Concerns**: Services layer separate from UI
-- **Protected Routes**: Role-based route protection
-- **Responsive Design**: Mobile-first approach with Tailwind
+## Features
+
+**Authentication & Security:**
+- JWT login, user registration, role-based route protection, session persistence
+
+**User Interface:**
+- Responsive mobile-first design, dark theme, reusable components, smooth animations
+
+**Dashboards:**
+- **Admin:** Stats cards, popular vacancies chart, recent activity
+- **Manager:** Vacancy stats, popular and recent vacancy charts
+- **Coder:** Browse vacancies, application counter, personal applications
+
+**Vacancy Management:**
+- List with filters (search, modality, location), create/edit form, active/inactive toggle
+
+**Application Management:**
+- Personalized view by role, 3 application limit (Coder), visual states, filters
 
 ---
 
-## Main Features
+## Installation
 
-### 1. Authentication System
+**With Docker (Recommended):**
+```bash
+git clone https://github.com/angelicacvo/riwi-jobs-frontend.git
+cd riwi-jobs-frontend
+docker-compose up -d --build
+# Access http://localhost:8080
+```
+
+**Without Docker:**
+```bash
+npm install
+npm run dev
+# Access http://localhost:5173
+```
+
+---
+
+## Test Users
+
+| Email | Password | Role |
+|-------|----------|------|
+| angelica@riwi.com | Admin123! | Admin |
+| gestor@riwi.com | Gestor123! | Manager |
+| juan@riwi.com | Coder123! | Coder |
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server (port 5173) |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview build |
+| `npm run lint` | Run ESLint |
+
+---
+
+## Configuration
+
+**Environment Variables:**
+```env
+VITE_API_URL=https://riwi-jobs-production.up.railway.app
+```
+
+**Ports:**
+- Development: 5173 (Vite dev server)
+- Production (Docker): 8080 (Nginx)
+- Preview: 4173
+
+---
+
+## Troubleshooting
+
+**Port 8080 busy:** Change port in `docker-compose.yml`  
+**API not responding:** Verify backend is running, check `VITE_API_URL` in `.env`  
+**Build errors:** Clear cache with `rm -rf node_modules dist && npm install && npm run build`
+
+---
+
+## License
+
+Academic project for Riwi - MIT License
+
+---
+
+**Developed by Angelica Maria Cuervo Marin**  
+**Riwi - Clan Ubuntu - Advanced Backend Track**
+npm run build
+
+# 4. Preview del build
+npm run preview
+```
+
+---
+
+## 🔑 Credenciales de Prueba
+
+| Email | Password | Rol |
+|-------|----------|-----|
+| angelica@riwi.com | Admin123! | ADMIN |
+| gestor@riwi.com | Gestor123! | GESTOR |
+| juan@riwi.com | Coder123! | CODER |
+
+---
+
+## 🎯 Flujo de Usuario
+
+### Como Administrador:
+1. Login → Dashboard con estadísticas completas
+2. Gestionar Usuarios → CRUD completo
+3. Ver Vacantes → Todas las vacantes del sistema
+4. Ver Postulaciones → Todas las postulaciones
+
+### Como Gestor:
+1. Login → Dashboard con métricas de vacantes
+2. Crear Vacante → Formulario completo
+3. Gestionar Vacantes → Editar/desactivar propias
+4. Ver Postulaciones → Consultar estado
+
+### Como Coder:
+1. Login → Dashboard personal
+2. Explorar → Buscar vacantes con filtros
+3. Postularse → Máximo 3 activas
+4. Mis Postulaciones → Ver estado
+
+---
+
+## 📊 Scripts Disponibles
+
+| Comando | Descripción |
+|---------|-------------|
+| `npm run dev` | Servidor desarrollo (puerto 5173) |
+| `npm run build` | Build de producción |
+| `npm run preview` | Preview del build |
+| `npm run lint` | Linter ESLint |
+
+---
+
+## 🔧 Configuración
+
+### Variables de Entorno
+
+```env
+# .env
+VITE_API_URL=https://riwi-jobs-production.up.railway.app
+```
+
+### Ports
+
+- **Desarrollo:** 5173 (Vite dev server)
+- **Producción (Docker):** 8080 (Nginx)
+- **Preview:** 4173
+
+---
+
+## 🎨 Componentes Principales
+
+### Layout
+- **Sidebar:** Navegación responsive con items según rol
+- **Layout:** Wrapper principal con sidebar y contenido
+
+### Dashboard
+- **AdminDashboard:** Stats + gráfico de vacantes populares + actividad
+- **GestorDashboard:** Stats + gráfico popular + vacantes recientes
+- **CoderDashboard:** Explorar vacantes + mis postulaciones
+
+### Pages
+- **LoginPage:** Autenticación con validación
+- **ExplorePage:** Catálogo de vacantes con filtros
+- **VacanciesPage:** CRUD de vacantes (Admin/Gestor)
+- **ApplicationsPage:** Gestión de postulaciones
+- **UsersPage:** CRUD usuarios (Admin only)
+
+---
+
+## 🐛 Troubleshooting
+
+**Puerto 8080 en uso:**
+```bash
+# Cambiar puerto en docker-compose.yml
+ports:
+  - "8081:8080"
+```
+
+**API no responde:**
+- Verificar que backend esté corriendo
+- Revisar VITE_API_URL en .env
+
+**Build errors:**
+```bash
+# Limpiar cache y reinstalar
+rm -rf node_modules dist
+npm install
+npm run build
+```
+
+---
+
+## 📄 Licencia
+
+MIT License - Proyecto académico para Riwi
+
+---
+
+<div align="center">
+
+**Desarrollado con ❤️ por Angelica María Cuervo Marín**  
+**Riwi - Clan Ubuntu - Ruta Avanzada Backend**
+
+</div>
 - Login with JWT token storage
 - Automatic token refresh
 - Persistent session with localStorage
